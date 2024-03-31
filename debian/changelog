@@ -1,19 +1,4 @@
-tailscale-initramfs (0.3) unstable; urgency=medium
-
-  * Configure resolv.conf in initramfs if it isn't already, so the tailscale
-    client can reach the control server more reliably.
-
- -- Paul Aurich <paul@darkrain42.org>  Wed, 03 May 2023 19:52:49 -0700
-
-tailscale-initramfs (0.2) unstable; urgency=medium
-
-  * Keep trying to bring up the network until it either comes up or the boot
-    process continues.
-
- -- Paul Aurich <paul@darkrain42.org>  Tue, 06 Dec 2022 20:12:18 -0800
-
 tailscale-initramfs (0.1) unstable; urgency=medium
 
-  * Initial Release.
-
- -- Paul Aurich <paul@darkrain42.org>  Fri, 14 Jan 2022 21:03:16 -0800
+  * Adopt a sandboxed tailscale state generation method to
+    overcome the limitations of an emphemeral key method.

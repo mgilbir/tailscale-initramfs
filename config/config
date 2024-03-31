@@ -1,63 +1,15 @@
-#
-# Configuration options for the tailscale-initramfs boot scripts.
-# You must run update-initramfs(8) to effect changes to this file (like
-# for other files in the '/etc/tailscale/initramfs' directory).
+TAILSCALE_SHUTDOWN_TIMEOUT=60
 
 #
-# Authkey to be used to authenticate to tailscale.  Passed to "tailscale up"
-# --authkey, so can also be file:/path/to/secret (the file will be copied into
-# the initramfs).
-#
-# Note that the config (and any key) is stored in the initramfs, which is
-# often outside of a cryptroot.
-# - https://tailscale.com/kb/1068/acl-tags/#generate-an-auth-key-with-an-acl-tag
-# - https://tailscale.com/kb/1111/ephemeral-nodes/
-#
-TAILSCALE_AUTHKEY=
-
-#
-# Hostname to pass to "tailscale up".
-# Default: ${HOSTNAME}-initramfs.
-#
-#TAILSCALE_HOSTNAME=
-
-#
-# Command-line options to pass to tailscale, in addition to
-# --authkey"${TAILSCALE_AUTHKEY}"
-# Default: none
+# Command line options to pass to tailscale(8)
 #
 #TAILSCALE_OPTIONS=
 
 #
-# Command-line options to pass to tailscaled
-# Default: none
-#
-#TAILSCALED_OPTIONS=
-
-#
-# Set to any non-empty string to log out of tailscale before passing out of
-# the initramfs. This is ineffective if some other package in the initramfs
-# (dropbear-initramfs) brings down the external interfaces.  See IFDOWN in
-# dropbear-initramfs's config.
-# Default: none
-#
-#TAILSCALE_LOGOUT=
-
-#
-# Space-delimited list of DNS server(s) to put in /etc/resolv.conf in the
-# initramfs if /etc/resolv.conf doesn't exist and if no DNS servers were
-# returned from DHCP.
-#
-# Tailscale will eventually fall back to bootstrapping DNS itself, but there's
-# no reason to rely on that (adds a slight delay).  Tailscale's fallback is
-# also problematic in some corner cases in some versions (see
-# https://github.com/tailscale/tailscale/issues/6110).
-#
-#FALLBACK_DNS_SERVERS=
-
-#
-# Bring down interfaces matching this pattern before passing out of the
-# initramfs.  (Same behavior as dropbear-initramfs)
-# Default: *
+# On local (non-NFS) mounts, interfaces matching this pattern are
+# brought down before exiting the ramdisk to avoid dirty network
+# configuration in the normal kernel.
+# The special value 'none' keeps all interfaces up and preserves routing
+# tables and addresses.
 #
 #IFDOWN=*

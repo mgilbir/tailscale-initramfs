@@ -1,10 +1,11 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: tailscale-initramfs
-Upstream-Contact: Paul Aurich <paul@darkrain42.org>
-Source: https://github.com/darkrain42/tailscale-initramfs
+Upstream-Contact: Peter Brunner <peter@lugoues.net>
+Source: https://github.com/lugoues/tailscale-initramfs
 
 Files: *
-Copyright: 2022 Paul Aurich <paul@darkrain42.org>
+Copyright: 2024 Peter Brunner <peter@lugoues.net>
+           2022 Paul Aurich <paul@darkrain42.org>
 License: GPL-2+
 
 # Started from dropbear-initramfs scripts.

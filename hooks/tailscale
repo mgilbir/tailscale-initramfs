@@ -14,18 +14,9 @@ case $1 in
         ;;
 esac
 
+# shellcheck disable=SC1091
 . /usr/share/initramfs-tools/hook-functions
 
-tailscale_warn() {
-    echo >&2 "tailscale: WARNING: $*"
-}
-tailscale_error() {
-    echo >&2 "tailscale: ERROR: $*"
-}
-
-RV=0
-
-copy_exec /usr/bin/tailscale bin
 copy_exec /usr/sbin/tailscaled sbin
 
 copy_exec /bin/ip bin
@@ -38,28 +29,27 @@ copy_modules_dir kernel/net/netfilter
 manual_add_modules tun
 
 copy_file config /etc/ssl/certs/ca-certificates.crt
-copy_file config /etc/hostname /etc/tailscale/initramfs/hostname
 
+# Copy tailscale state
+copy_file config /etc/tailscale/initramfs/tailscaled.state var/lib/tailscale/tailscaled.state
+
+# Copy config
+mkdir -p "$DESTDIR/etc/tailscale"
 if [ -e /etc/tailscale/initramfs/config ]; then
-    cp -pt "$DESTDIR/etc/tailscale/initramfs" /etc/tailscale/initramfs/config
-    . /etc/tailscale/initramfs/config
-
-    case "${TAILSCALE_AUTHKEY-}" in
-        file:*)
-            AUTHKEY_FILE=${TAILSCALE_AUTHKEY#file:}
-            if [ -s "$AUTHKEY_FILE" ]; then
-                copy_file keyfile "$AUTHKEY_FILE"
-            else
-                tailscale_error "Auth key file '$AUTHKEY_FILE' does not exist or is empty."
-                RV=1
-            fi
-            ;;
-        "")
-            tailscale_warn "\$TAILSCALE_AUTHKEY not set; logging into tailscale won't work!"
-            ;;
-    esac
-else
-    tailscale_warn "Missing tailscale initramfs config; logging into tailscale won't work!"
+    cp -p "/etc/tailscale/initramfs/config" "$DESTDIR/etc/tailscale/"
 fi
 
-exit $RV
+# create home
+home=$(mktemp -d "$DESTDIR/root-XXXXXX")
+chmod 0700 "$home"
+mkdir -m0700 "$home/.ssh"
+
+#Create user/group required for login
+for x in passwd group; do echo "$x: files"; done >"$DESTDIR/etc/nsswitch.conf"
+echo "root:x:0:0:root:/root:/bin/sh" > "$DESTDIR/etc/passwd"
+echo "root:!:19808:0:99999:7:::" >  "$DESTDIR/etc/shadow"
+echo "root:x:0:" >"$DESTDIR/etc/group"
+
+
+
+exit 0

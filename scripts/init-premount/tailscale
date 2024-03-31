@@ -1,6 +1,7 @@
 #!/bin/sh
 
-#set -e
+# set -x
+# set -e
 
 PREREQ="udev"
 prereqs()
@@ -15,25 +16,10 @@ case $1 in
         ;;
 esac
 
-[ -x /bin/tailscale ] || exit 0
+[ -x /sbin/tailscaled ] || exit 0
 
+# shellcheck disable=SC1091
 . /scripts/functions
-
-PIDFILE="/run/tailscale.pid"
-
-if [ -e /etc/tailscale/initramfs/config ]; then
-    . /etc/tailscale/initramfs/config
-fi
-
-if [ -z "${TAILSCALE_HOSTNAME-}" ]; then
-    if [ -f /etc/tailscale/initramfs/hostname ]; then
-        HOSTNAME=$(cat /etc/tailscale/initramfs/hostname)
-    else
-        HOSTNAME=$(hostname -s)
-    fi
-
-    TAILSCALE_HOSTNAME=${HOSTNAME}-initramfs
-fi
 
 network_up()
 {
@@ -75,45 +61,24 @@ create_resolv_conf()
 # shellcheck disable=SC2039,SC2086,SC3043
 run_tailscale()
 {
+    # always run configure_networking() before tailscale(8); on NFS
+    # mounts this has been done already
+    [ "$BOOT" = nfs ] || configure_networking
+
     log_begin_msg "Starting tailscale"
 
-    local options="--state=/var/lib/tailscale/tailscaled.state --socket=/run/tailscale/tailscaled.sock"
-
-    # FIXME: This races with dropbear-initramfs bringing up the network
-    # asynchronously
-    if [ "$BOOT" != nfs ]; then
-        # Keep trying to bring up the network until it's up
-        # or the boot process continues toward finish.
-        while true; do
-            # "." builtin (in dash) exits on error. Run configure_networking
-            # in a subshell and wait for it.
-            configure_networking &
-            wait $!
-            if ! [ -e "$PIDFILE" ]; then
-                break
-            fi
-            if network_up; then
-                create_resolv_conf
-                break
-            fi
-        done
-    fi
-
-    # A little race-y to start the client before the daemon, but the client
-    # will attempt to connect to the socket for a while.
-    # https://github.com/tailscale/tailscale/blob/8cf1af8a0703c36256fc58e98ddb63b8907848f1/safesocket/safesocket.go#L119-L122
-    /bin/tailscale --socket=/run/tailscale/tailscaled.sock up --authkey="${TAILSCALE_AUTHKEY}" --hostname="${TAILSCALE_HOSTNAME}" $TAILSCALE_OPTIONS &
-
-    if [ "${debug:-}" != y ]; then
-        exec 2>/run/initramfs/tailscale.log
-    fi
-    exec /sbin/tailscaled $options $TAILSCALED_OPTIONS
+    exec /sbin/tailscaled \
+        --state=/var/lib/tailscale/tailscaled.state \
+        --socket=/run/tailscale/tailscaled.sock \
+        ${TAILSCALED_OPTIONS:-}
 }
 
-[ "$BOOT" = nfs ] && configure_networking
+if [ -e /etc/tailscale/config ]; then
+    # shellcheck disable=SC1091
+    . /etc/tailscale/config
+fi
 
 modprobe tun
-run_tailscale &
-echo $! > "$PIDFILE"
 
-exit 0
+run_tailscale &
+echo $! > "/run/tailscaled.pid"
