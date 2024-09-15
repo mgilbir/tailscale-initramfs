@@ -50,6 +50,4 @@ echo "root:x:0:0:root:/root:/bin/sh" > "$DESTDIR/etc/passwd"
 echo "root:!:19808:0:99999:7:::" >  "$DESTDIR/etc/shadow"
 echo "root:x:0:" >"$DESTDIR/etc/group"
 
-
-
 exit 0
