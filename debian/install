@@ -3,4 +3,4 @@ hooks/tailscale usr/share/initramfs-tools/hooks
 scripts/init-bottom/tailscale usr/share/initramfs-tools/scripts/init-bottom
 scripts/init-premount/tailscale usr/share/initramfs-tools/scripts/init-premount
 setup-initramfs-tailscale usr/sbin
-config/config etc/tailscale/initramfs/config
+config/config etc/tailscale/initramfs
