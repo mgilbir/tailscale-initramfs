@@ -1,7 +1,0 @@
-Description: Lugoues/tailscale-initramfs
-Codename: stable
-Architectures: amd64 arm64 armhf i386
-Components: main
-SignWith: 498F12E8686D428B1FA2D09021A9EDA7C4CFCDA8
-
-
