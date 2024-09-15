@@ -1,4 +1,0 @@
-tailscale-initramfs (0.1) unstable; urgency=medium
-
-  * Adopt a sandboxed tailscale state generation method to
-    overcome the limitations of an emphemeral key method.
