@@ -39,15 +39,21 @@ if [ -e /etc/tailscale/initramfs/config ]; then
     cp -p "/etc/tailscale/initramfs/config" "$DESTDIR/etc/tailscale/"
 fi
 
-# create home
-home=$(mktemp -d "$DESTDIR/root-XXXXXX")
-chmod 0700 "$home"
-mkdir -m0700 "$home/.ssh"
+# Create the home directory etc for the root user to enable ssh. This happens
+# whether or not we requested tailscale ssh support at setup time, which is
+# redundant, but we at least avoid doing it when dropbear-initramfs is present
+# as it will prevent that from working.
+if [! -e "/etc/dropbear/initramfs" ]; then
+    # create home
+    home=$(mktemp -d "$DESTDIR/root-XXXXXX")
+    chmod 0700 "$home"
+    mkdir -m0700 "$home/.ssh"
 
-#Create user/group required for login
-for x in passwd group; do echo "$x: files"; done >"$DESTDIR/etc/nsswitch.conf"
-echo "root:x:0:0:root:/root:/bin/sh" > "$DESTDIR/etc/passwd"
-echo "root:!:19808:0:99999:7:::" >  "$DESTDIR/etc/shadow"
-echo "root:x:0:" >"$DESTDIR/etc/group"
+    #Create user/group required for login
+    for x in passwd group; do echo "$x: files"; done >"$DESTDIR/etc/nsswitch.conf"
+    echo "root:x:0:0:root:/root:/bin/sh" > "$DESTDIR/etc/passwd"
+    echo "root:!:19808:0:99999:7:::" >  "$DESTDIR/etc/shadow"
+    echo "root:x:0:" >"$DESTDIR/etc/group"
+fi
 
 exit 0
