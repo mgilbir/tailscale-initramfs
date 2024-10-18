@@ -43,7 +43,7 @@ fi
 # whether or not we requested tailscale ssh support at setup time, which is
 # redundant, but we at least avoid doing it when dropbear-initramfs is present
 # as it will prevent that from working.
-if [! -e "/etc/dropbear/initramfs" ]; then
+if [ ! -e "/etc/dropbear/initramfs" ]; then
     # create home
     home=$(mktemp -d "$DESTDIR/root-XXXXXX")
     chmod 0700 "$home"
