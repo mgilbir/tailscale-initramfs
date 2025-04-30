@@ -43,17 +43,21 @@ fi
 # whether or not we requested tailscale ssh support at setup time, which is
 # redundant, but we at least avoid doing it when dropbear-initramfs is present
 # as it will prevent that from working.
-if [ ! -e "/etc/dropbear/initramfs" ]; then
-    # create home
-    home=$(mktemp -d "$DESTDIR/root-XXXXXX")
-    chmod 0700 "$home"
-    mkdir -m0700 "$home/.ssh"
-
-    #Create user/group required for login
-    for x in passwd group; do echo "$x: files"; done >"$DESTDIR/etc/nsswitch.conf"
-    echo "root:x:0:0:root:/root:/bin/sh" > "$DESTDIR/etc/passwd"
-    echo "root:!:19808:0:99999:7:::" >  "$DESTDIR/etc/shadow"
-    echo "root:x:0:" >"$DESTDIR/etc/group"
+if home=$(grep -s '^root:' "$DESTDIR/etc/passwd" | cut -d: -f6) && [ -n "$home" ]; then
+    # Ensure /etc/passwd points at password stored in /etc/shadow
+    sed -Ei -e 's/^root:[^:]+/root:x/' "$DESTDIR/etc/passwd"
+else
+   # create home
+   home=$(mktemp -d "$DESTDIR/root-XXXXXX")
+   chmod 0700 "$home"
+   mkdir -m0700 "$home/.ssh"
+   home=${home#"$DESTDIR"}
 fi
+
+#Create user/group required for login
+for x in passwd group; do echo "$x: files"; done >"$DESTDIR/etc/nsswitch.conf"
+echo "root:x:0:0:root:$home:/bin/sh" > "$DESTDIR/etc/passwd"
+echo "root:!:19808:0:99999:7:::" >  "$DESTDIR/etc/shadow"
+echo "root:x:0:" >"$DESTDIR/etc/group"
 
 exit 0
