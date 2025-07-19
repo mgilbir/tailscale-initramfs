@@ -8,7 +8,7 @@
         Run the <a href="https://tailscale.com">Tailscale client</a> in a Linux
         initrd on Debian or Ubuntu.
 
-        <br/><a href="https://github.com/lugoues/tailscale-initramfs">project
+        <br/><a href="https://github.com/mgilbir/tailscale-initramfs">project
             page</a>
     </div>
 
@@ -16,8 +16,8 @@
         <pre>
 # Add the repository
 sudo mkdir -p --mode=0755 /usr/share/local/keyrings
-curl -fsSL https://lugoues.github.io/tailscale-initramfs/keyring.asc | sudo tee /usr/local/share/keyrings/tailscale-initramfs-keyring.asc &gt;/dev/null
-echo 'deb [signed-by=/usr/local/share/keyrings/tailscale-initramfs-keyring.asc] https://lugoues.github.io/tailscale-initramfs/repo stable main' | sudo tee /etc/apt/sources.list.d/tailscale-initramfs.list &gt;/dev/null
+curl -fsSL https://mgilbir.github.io/tailscale-initramfs/keyring.asc | sudo tee /usr/local/share/keyrings/tailscale-initramfs-keyring.asc &gt;/dev/null
+echo 'deb [signed-by=/usr/local/share/keyrings/tailscale-initramfs-keyring.asc] https://mgilbir.github.io/tailscale-initramfs/repo stable main' | sudo tee /etc/apt/sources.list.d/tailscale-initramfs.list &gt;/dev/null
 
 # Install tailscale-initramfs
 sudo apt-get update &amp;&amp; sudo apt-get install tailscale-initramfs</pre>
