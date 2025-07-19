@@ -94,7 +94,6 @@ info "tailscale successfully configured.
 Next steps:
   * Review ${TS_STATEDIR}/config (as root)
   * Run 'update-initramfs -c -k all' to rebuild initramfs
-  * Check the README at https://github.com/lugoues/mkinitcpio-tailscale for security considerations
 
 enjoy!
 "

@@ -1,10 +1,11 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: tailscale-initramfs
-Upstream-Contact: Peter Brunner <peter@lugoues.net>
-Source: https://github.com/lugoues/tailscale-initramfs
+Upstream-Contact: Miguel Eduardo Gil Biraud <miguel.gil.biraud@ieee.org>
+Source: https://github.com/mgilbir/tailscale-initramfs
 
 Files: *
-Copyright: 2024 Peter Brunner <peter@lugoues.net>
+Copyright: 2025 Miguel Eduardo Gil Biraud <miguel.gil.biraud@ieee.org>
+           2024 Peter Brunner <peter@lugoues.net>
            2022 Paul Aurich <paul@darkrain42.org>
 License: GPL-2+
 

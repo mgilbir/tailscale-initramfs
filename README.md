@@ -14,8 +14,8 @@ root filesystem.
 ```bash
 # Add the repository
 sudo mkdir -p --mode=0755 /usr/local/share/keyrings
-curl -fsSL https://lugoues.github.io/tailscale-initramfs/public.key | sudo tee /usr/local/share/keyrings/tailscale-initramfs-keyring.asc >/dev/null
-echo 'deb [signed-by=/usr/local/share/keyrings/tailscale-initramfs-keyring.asc] https://lugoues.github.io/tailscale-initramfs/repo stable main' | sudo tee /etc/apt/sources.list.d/tailscale-initramfs.list >/dev/null
+curl -fsSL https://mgilbir.github.io/tailscale-initramfs/public.key | sudo tee /usr/local/share/keyrings/tailscale-initramfs-keyring.asc >/dev/null
+echo 'deb [signed-by=/usr/local/share/keyrings/tailscale-initramfs-keyring.asc] https://mgilbir.github.io/tailscale-initramfs/repo stable main' | sudo tee /etc/apt/sources.list.d/tailscale-initramfs.list >/dev/null
 
 # Install tailscale-initramfs
 sudo apt-get update && sudo apt-get install tailscale-initramfs

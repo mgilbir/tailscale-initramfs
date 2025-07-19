@@ -1,12 +1,12 @@
 Source: tailscale-initramfs
 Section: net
 Priority: optional
-Maintainer: Peter Brunner <peter@lugoues.net>
+Maintainer: Miguel Eduardo Gil Biraud <miguel.gil.biraud@ieee.org>
 Build-Depends: debhelper-compat (= 13)
 Standards-Version: 4.5.1
-Homepage: https://github.com/lugoues/tailscale-initramfs
-Vcs-Browser: https://github.com/lugoues/tailscale-initramfs
-Vcs-Git: https://github.com/lugoues/tailscale-initramfs.git
+Homepage: https://github.com/mgilbir/tailscale-initramfs
+Vcs-Browser: https://github.com/mgilbir/tailscale-initramfs
+Vcs-Git: https://github.com/mgilbir/tailscale-initramfs.git
 Rules-Requires-Root: no
 
 Package: tailscale-initramfs
