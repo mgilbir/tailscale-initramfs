@@ -1,7 +1,7 @@
-Description: lugoues/tailscale-initramfs
+Description: mgilbir/tailscale-initramfs
 Codename: stable
 Architectures: amd64 arm64 armhf i386
 Components: main
-SignWith: 7373FB630B1FDFADE27F1CDD0E377EF1425267A1
+SignWith: 717ABB15340A9860F109EE245BD5E48CF0D82449
 
 
